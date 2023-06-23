@@ -69,7 +69,7 @@ jobs:
                         echo Failed waiting for MySQL && exit 1
             -   run:
                     name: Run tests
-                    command: bin/phpunit
+                    command: bin/phpunit --coverage-xml coverage && phpunit-threshold.php coverage/index.xml 40
     check-code-style:
         working_directory: ~/project
         docker:
