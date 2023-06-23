@@ -4,6 +4,12 @@ jobs:
     build:
         docker:
             -   image: cimg/php:8.1
+            -   image: cimg/mysql:8.0
         steps:
             - checkout
-            -   run: php --version
+            -   run:
+                    name: Install dependencies
+                    command: composer install
+            -   run:
+                    name: Run tests
+                    command: bin/phpunit
