@@ -7,6 +7,7 @@ namespace App\Tests\Entity;
 use App\Entity\Book;
 use App\Factory\BookFactory;
 use App\Repository\BookRepository;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -22,10 +23,11 @@ final class BookTest extends KernelTestCase
 
         BookFactory::createMany(5);
 
+        /** @var Registry $registry */
+        $registry = $kernel->getContainer()->get('doctrine');
+
         /** @var BookRepository $bookRepository */
-        $bookRepository = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager()->getRepository(Book::class);
+        $bookRepository = $registry->getRepository(Book::class);
 
         self::assertCount(5, $bookRepository->findAll());
     }
