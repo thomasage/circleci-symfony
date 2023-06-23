@@ -57,6 +57,11 @@ jobs:
         steps:
             -   attach_workspace:
                     at: ~/
+            - run:
+                  name: Install PCOV
+                  command: |
+                      sudo pecl install pcov
+                      sudo docker-php-ext-enable pcov
             -   run:
                     name: Waiting for MySQL to be ready
                     command: |
