@@ -12,10 +12,10 @@ if (!is_countable($argv) || 2 !== count($argv)) {
     exit(1);
 }
 
-$minimumCodeCoverageInPercent = (int) $argv[1];
+$minimumCodeCoverageInPercent = (int)$argv[1];
 
 $phpunitConfig = new SimpleXMLElement(file_get_contents(__DIR__.'/../phpunit.xml.dist'));
-$cloverSourceFile = (string) $phpunitConfig->coverage->report->clover['outputFile'];
+$cloverSourceFile = (string)$phpunitConfig->coverage->report->clover['outputFile'];
 if ('' === $cloverSourceFile) {
     printf(
         '%sUnable to find Clover file in phpunit.xml.dist%s%s',
@@ -36,9 +36,9 @@ if (!file_exists($cloverSourceFile) || !is_readable($cloverSourceFile)) {
 }
 
 $cloverXML = new SimpleXMLElement(file_get_contents($cloverSourceFile));
-$coveredStatements = (int) $cloverXML->project->metrics['coveredstatements'];
-$totalStatements = (int) $cloverXML->project->metrics['statements'];
-$coverageInPercent = (int) round($coveredStatements / $totalStatements * 100);
+$coveredStatements = (int)$cloverXML->project->metrics['coveredstatements'];
+$totalStatements = (int)$cloverXML->project->metrics['statements'];
+$coverageInPercent = (int)round($coveredStatements / $totalStatements * 100);
 
 if ($coverageInPercent < $minimumCodeCoverageInPercent) {
     printf(
@@ -53,9 +53,11 @@ if ($coverageInPercent < $minimumCodeCoverageInPercent) {
 }
 
 printf(
-    '%sCode coverage is %d%% - OK!%s%s',
+    '%sCode coverage is %d%% (%d/%d) - OK!%s%s',
     PHP_EOL,
     $coverageInPercent,
+    $coveredStatements,
+    $totalStatements,
     PHP_EOL,
     PHP_EOL
 );
