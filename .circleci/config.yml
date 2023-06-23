@@ -8,7 +8,7 @@ jobs:
                     DATABASE_URL: "mysql://test:test@127.0.0.1:3306/main?serverVersion=8.0.32&charset=utf8mb4"
             -   image: cimg/mysql:8.0
                 environment:
-                    MYSQL_DATABASE: main
+                    MYSQL_DATABASE: main_test
                     MYSQL_PASSWORD: test
                     MYSQL_ROOT_PASSWORD: root
                     MYSQL_USER: test
