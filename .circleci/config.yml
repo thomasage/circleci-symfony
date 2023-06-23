@@ -1,22 +1,60 @@
 version: 2.1
 
+default: &default
+    working_directory: ~/project
+    docker:
+        -   image: b64e02/pt2d3e
+            environment:
+                DATABASE_URL: "mysql://test:test@127.0.0.1:3306/main?serverVersion=8.0.32&charset=utf8mb4"
+                MAILCATCHER_DSN: null://null
+
 jobs:
     build:
-        docker:
-            -   image: cimg/php:8.1
-                environment:
-                    DATABASE_URL: "mysql://test:test@127.0.0.1:3306/main?serverVersion=8.0.32&charset=utf8mb4"
-            -   image: cimg/mysql:8.0
-                environment:
-                    MYSQL_DATABASE: main_test
-                    MYSQL_PASSWORD: test
-                    MYSQL_ROOT_PASSWORD: root
-                    MYSQL_USER: test
+        <<: *default
         steps:
+            -   restore_cache:
+                    keys:
+                        - source-v1-{{ .Branch }}-{{ .Revision }}
+                        - source-v1-{{ .Branch }}-
+                        - source-v1-
             - checkout
+            -   save_cache:
+                    key: source-v1-{{ .Branch }}-{{ .Revision }}
+                    paths:
+                        - ".git"
+            -   restore_cache:
+                    keys:
+                        - v1-dependencies-{{ checksum "composer.lock" }}
+                        - v1-dependencies-
             -   run:
-                    name: Install dependencies
+                    name: Install PHP dependencies
                     command: composer install
+            -   run:
+                    name: Install Javascript dependencies
+                    command: yarn install
+            -   save_cache:
+                    key: v1-dependencies-{{ checksum "composer.lock" }}
+                    paths:
+                        - ./vendor
+            -   restore_cache:
+                    keys:
+                        - v1-packages-{{ checksum "yarn.lock" }}
+                        - v1-packages-
+            #            -   run: yarn install
+            #            -   run: yarn dev
+            -   save_cache:
+                    key: v1-packages-{{ checksum "yarn.lock" }}
+                    paths:
+                        - ./node_modules
+            -   persist_to_workspace:
+                    root: ~/
+                    paths:
+                        - project
+    phpunit:
+        <<: *default
+        steps:
+            -   attach_workspace:
+                    at: ~/
             -   run:
                     name: Waiting for MySQL to be ready
                     command: |
@@ -30,3 +68,12 @@ jobs:
             -   run:
                     name: Run tests
                     command: bin/phpunit
+
+workflows:
+    version: 2
+    build-and-test:
+        jobs:
+            - build
+            -   phpunit:
+                    requires:
+                        - build
