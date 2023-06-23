@@ -29,13 +29,13 @@ jobs:
                         - ./vendor
             -   restore_cache:
                     keys:
-                        - v1-packages-{{ checksum "yarn.lock" }}
-                        - v1-packages-
+                        - v2-packages-{{ checksum "yarn.lock" }}
+                        - v2-packages-
             -   run:
                     name: Install Javascript dependencies
                     command: yarn install
             -   save_cache:
-                    key: v1-packages-{{ checksum "yarn.lock" }}
+                    key: v2-packages-{{ checksum "yarn.lock" }}
                     paths:
                         - ./node_modules
             -   persist_to_workspace:
