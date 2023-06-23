@@ -90,6 +90,16 @@ jobs:
             -   run:
                     name: Run static analysis
                     command: vendor/bin/phpstan
+    rector:
+        working_directory: ~/project
+        docker:
+            -   image: cimg/php:8.1-node
+        steps:
+            -   attach_workspace:
+                    at: ~/
+            -   run:
+                    name: Check available refactoring
+                    command: vendor/bin/rector process --dry-run
 
 workflows:
     version: 2
@@ -103,5 +113,8 @@ workflows:
                     requires:
                         - build
             -   phpunit:
+                    requires:
+                        - build
+            -   rector:
                     requires:
                         - build

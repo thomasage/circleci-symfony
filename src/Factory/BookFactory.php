@@ -17,6 +17,9 @@ final class BookFactory extends ModelFactory
         return Book::class;
     }
 
+    /**
+     * @return array{title: string}
+     */
     protected function getDefaults(): array
     {
         return [
