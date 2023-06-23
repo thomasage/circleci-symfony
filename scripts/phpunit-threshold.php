@@ -3,20 +3,59 @@
 
 declare(strict_types=1);
 
-if (3 !== $argc) {
-    echo PHP_EOL.'Usage: '.$argv[0].' <path/to/coverage.xml> <threshold>'.PHP_EOL.PHP_EOL;
-    exit(-1);
+// Inspired by https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+if (!is_countable($argv) || 2 !== count($argv)) {
+    printf('%sUsage: %s [minimum-code-coverage-in-percent]%s%s', PHP_EOL, basename(__FILE__), PHP_EOL, PHP_EOL);
+    exit(1);
 }
 
-$file = $argv[1];
-$threshold = (float) $argv[2];
+$minimumCodeCoverageInPercent = (int) $argv[1];
 
-$coverage = simplexml_load_string(file_get_contents($file));
-$ratio = (float) $coverage->project->directory->totals->lines['percent'];
-
-printf('Line coverage: %s%%%s', $ratio, PHP_EOL);
-printf('Threshold: %s%%%s', $threshold, PHP_EOL);
-
-if ($ratio < $threshold) {
-    exit(-1);
+$phpunitConfig = new SimpleXMLElement(file_get_contents(__DIR__.'/../phpunit.xml.dist'));
+$cloverSourceFile = (string) $phpunitConfig->coverage->report->clover['outputFile'];
+if ('' === $cloverSourceFile) {
+    printf(
+        '%sUnable to find Clover file in phpunit.xml.dist%s%s',
+        PHP_EOL,
+        PHP_EOL,
+        PHP_EOL
+    );
+    exit(1);
 }
+if (!file_exists($cloverSourceFile) || !is_readable($cloverSourceFile)) {
+    printf(
+        '%sClover file is not found or not readable%s%s',
+        PHP_EOL,
+        PHP_EOL,
+        PHP_EOL
+    );
+    exit(1);
+}
+
+$cloverXML = new SimpleXMLElement(file_get_contents($cloverSourceFile));
+$coveredStatements = (int) $cloverXML->project->metrics['coveredstatements'];
+$totalStatements = (int) $cloverXML->project->metrics['statements'];
+$coverageInPercent = (int) round($coveredStatements / $totalStatements * 100);
+
+if ($coverageInPercent < $minimumCodeCoverageInPercent) {
+    printf(
+        '%sCode coverage is %d%%, which is below the accepted %d%%.%s%s',
+        PHP_EOL,
+        $coverageInPercent,
+        $minimumCodeCoverageInPercent,
+        PHP_EOL,
+        PHP_EOL
+    );
+    exit(1);
+}
+
+printf(
+    '%sCode coverage is %d%% - OK!%s%s',
+    PHP_EOL,
+    $coverageInPercent,
+    PHP_EOL,
+    PHP_EOL
+);

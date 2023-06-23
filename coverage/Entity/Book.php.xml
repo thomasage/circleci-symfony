@@ -2,19 +2,25 @@
 <phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
   <file name="Book.php" path="/Entity">
     <totals>
-      <lines total="38" comments="0" code="38" executable="4" executed="2" percent="50.00"/>
-      <methods count="3" tested="1" percent="33.33"/>
+      <lines total="38" comments="0" code="38" executable="4" executed="4" percent="100.00"/>
+      <methods count="3" tested="3" percent="100.00"/>
       <functions count="0" tested="0" percent="0"/>
-      <classes count="1" tested="0" percent="0.00"/>
+      <classes count="1" tested="1" percent="100.00"/>
       <traits count="0" tested="0" percent="0"/>
     </totals>
-    <class name="App\Entity\Book" start="10" executable="4" executed="2" crap="4.12">
+    <class name="App\Entity\Book" start="10" executable="4" executed="4" crap="3">
       <namespace name="App\Entity"/>
-      <method name="getId" signature="getId(): ?int" start="21" end="24" crap="2" executable="1" executed="0" coverage="0"/>
-      <method name="getTitle" signature="getTitle(): ?string" start="26" end="29" crap="2" executable="1" executed="0" coverage="0"/>
+      <method name="getId" signature="getId(): ?int" start="21" end="24" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="getTitle" signature="getTitle(): ?string" start="26" end="29" crap="1" executable="1" executed="1" coverage="100"/>
       <method name="setTitle" signature="setTitle(string $title): static" start="31" end="36" crap="1" executable="2" executed="2" coverage="100"/>
     </class>
     <coverage>
+      <line nr="23">
+        <covered by="App\Tests\Entity\BookTest::testSomething"/>
+      </line>
+      <line nr="28">
+        <covered by="App\Tests\Entity\BookTest::testSomething"/>
+      </line>
       <line nr="33">
         <covered by="App\Tests\Entity\BookTest::testSomething"/>
       </line>

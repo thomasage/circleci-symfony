@@ -20,6 +20,10 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <report>
+            <clover outputFile="clover.xml"/>
+            <html outputDirectory="coverage"/>
+        </report>
     </coverage>
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>

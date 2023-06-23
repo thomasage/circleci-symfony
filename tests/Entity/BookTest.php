@@ -21,7 +21,8 @@ final class BookTest extends KernelTestCase
     {
         $kernel = self::bootKernel();
 
-        BookFactory::createMany(5);
+        /** @var Book $book */
+        $book = BookFactory::createOne()->object();
 
         /** @var Registry $registry */
         $registry = $kernel->getContainer()->get('doctrine');
@@ -29,6 +30,10 @@ final class BookTest extends KernelTestCase
         /** @var BookRepository $bookRepository */
         $bookRepository = $registry->getRepository(Book::class);
 
-        self::assertCount(5, $bookRepository->findAll());
+        $books = $bookRepository->findAll();
+
+        self::assertCount(1, $books);
+        self::assertSame($book->getId(), $books[0]->getId());
+        self::assertSame($book->getTitle(), $books[0]->getTitle());
     }
 }
