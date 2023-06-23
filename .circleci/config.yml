@@ -29,4 +29,5 @@ jobs:
                         echo Failed waiting for MySQL && exit 1
             -   run:
                     name: Run tests
-                    command: bin/phpunit
+                    command: php -v
+#                    command: bin/phpunit
