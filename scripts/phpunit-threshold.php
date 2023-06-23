@@ -36,9 +36,7 @@ if (!file_exists($cloverSourceFile) || !is_readable($cloverSourceFile)) {
 }
 
 $cloverXML = new SimpleXMLElement(file_get_contents($cloverSourceFile));
-$coveredStatements = (int) $cloverXML->project->metrics['coveredstatements'];
-$totalStatements = (int) $cloverXML->project->metrics['statements'];
-$coverageInPercent = (int) round($coveredStatements / $totalStatements * 100);
+$coverageInPercent = (float) $cloverXML->project->directory->totals->lines['percent'];
 
 if ($coverageInPercent < $minimumCodeCoverageInPercent) {
     printf(

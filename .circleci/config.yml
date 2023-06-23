@@ -75,7 +75,6 @@ jobs:
             -   run:
                     name: Run tests
                     command: bin/phpunit
-            -   run: ls
             -   run:
                     name: Check code coverage
                     command: scripts/phpunit-threshold.php 50
