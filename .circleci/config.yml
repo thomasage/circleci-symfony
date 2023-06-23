@@ -9,7 +9,7 @@ jobs:
             -   image: cimg/mysql:8.0
                 environment:
                     MYSQL_DATABASE: main
-                    MYSQL_PASSWOrD: test
+                    MYSQL_PASSWORD: test
                     MYSQL_ROOT_PASSWORD: root
                     MYSQL_USER: test
         steps:
@@ -29,5 +29,4 @@ jobs:
                         echo Failed waiting for MySQL && exit 1
             -   run:
                     name: Run tests
-                    command: php -v
-#                    command: bin/phpunit
+                    command: bin/phpunit
