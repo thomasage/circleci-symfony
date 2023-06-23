@@ -69,7 +69,11 @@ jobs:
                         echo Failed waiting for MySQL && exit 1
             -   run:
                     name: Run tests
-                    command: bin/phpunit && scripts/phpunit-threshold.php 50
+                    command: bin/phpunit
+            -   run: ls
+            -   run:
+                    name: Check code coverage
+                    command: scripts/phpunit-threshold.php 50
     check-code-style:
         working_directory: ~/project
         docker:
