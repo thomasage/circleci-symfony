@@ -1,15 +1,10 @@
 version: 2.1
 
-default: &default
-    working_directory: ~/project
-    docker:
-        -   image: cimg/php:8.1-node
-            environment:
-                DATABASE_URL: "mysql://test:test@127.0.0.1:3306/main?serverVersion=8.0.32&charset=utf8mb4"
-
 jobs:
     build:
-        <<: *default
+        working_directory: ~/project
+        docker:
+            -   image: cimg/php:8.1-node
         steps:
             -   restore_cache:
                     keys:
@@ -50,8 +45,11 @@ jobs:
                     paths:
                         - project
     phpunit:
-        <<: *default
+        working_directory: ~/project
         docker:
+            -   image: cimg/php:8.1-node
+                environment:
+                    DATABASE_URL: "mysql://test:test@127.0.0.1:3306/main?serverVersion=8.0.32&charset=utf8mb4"
             -   image: cimg/mysql:8.0
                 environment:
                     MYSQL_DATABASE: main_test
@@ -75,7 +73,9 @@ jobs:
                     name: Run tests
                     command: bin/phpunit
     check-code-style:
-        <<: *default
+        working_directory: ~/project
+        docker:
+            -   image: cimg/php:8.1-node
         steps:
             -   attach_workspace:
                     at: ~/
@@ -83,7 +83,9 @@ jobs:
                     name: Check code style
                     command: vendor/bin/php-cs-fixer fix --dry-run
     phpstan:
-        <<: *default
+        working_directory: ~/project
+        docker:
+            -   image: cimg/php:8.1-node
         steps:
             -   attach_workspace:
                     at: ~/
