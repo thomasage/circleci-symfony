@@ -23,9 +23,6 @@ jobs:
             -   run:
                     name: Install PHP dependencies
                     command: composer install
-            -   run:
-                    name: Install Javascript dependencies
-                    command: yarn install
             -   save_cache:
                     key: v1-dependencies-{{ checksum "composer.lock" }}
                     paths:
@@ -34,8 +31,9 @@ jobs:
                     keys:
                         - v1-packages-{{ checksum "yarn.lock" }}
                         - v1-packages-
-            #            -   run: yarn install
-            #            -   run: yarn dev
+            -   run:
+                    name: Install Javascript dependencies
+                    command: yarn install
             -   save_cache:
                     key: v1-packages-{{ checksum "yarn.lock" }}
                     paths:
