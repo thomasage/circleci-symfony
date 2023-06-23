@@ -15,7 +15,9 @@ default: &default
 
 jobs:
     build:
-        <<: *default
+        working_directory: ~/project
+        docker:
+            -   image: cimg/php:8.1-node
         steps:
             -   restore_cache:
                     keys:
@@ -73,6 +75,16 @@ jobs:
             -   run:
                     name: Run tests
                     command: bin/phpunit
+    check-code-style:
+        working_directory: ~/project
+        docker:
+            -   image: cimg/php:8.1-node
+        steps:
+            -   attach_workspace:
+                    at: ~/
+            -   run:
+                    name: Check code style
+                    command: vendor/bin/php-cs-fixer fix --dry-run
 
 workflows:
     version: 2
@@ -80,5 +92,8 @@ workflows:
         jobs:
             - build
             -   phpunit:
+                    requires:
+                        - build
+            -   check-code-style:
                     requires:
                         - build

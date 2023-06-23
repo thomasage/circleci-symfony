@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Entity;
@@ -12,7 +13,8 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 final class BookTest extends KernelTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
 
     public function testSomething(): void
     {
