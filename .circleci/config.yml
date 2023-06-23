@@ -57,11 +57,11 @@ jobs:
         steps:
             -   attach_workspace:
                     at: ~/
-            - run:
-                  name: Install PCOV
-                  command: |
-                      sudo pecl install pcov
-                      sudo docker-php-ext-enable pcov
+            -   run:
+                    name: Install PCOV
+                    command: |
+                        sudo pecl install pcov
+                        sudo docker-php-ext-enable pcov
             -   run:
                     name: Waiting for MySQL to be ready
                     command: |
@@ -78,6 +78,10 @@ jobs:
             -   run:
                     name: Check code coverage
                     command: scripts/phpunit-threshold.php 50
+            -   store_artifacts:
+                    path: coverage
+            -   store_artifacts:
+                    path: clover.xml
     check-code-style:
         working_directory: ~/project
         docker:
