@@ -58,15 +58,10 @@ jobs:
             -   attach_workspace:
                     at: ~/
             -   run:
-                    name: Install Xdebug
+                    name: Install PCOV
                     command: |
-                        sudo pecl install xdebug
-#                        sudo docker-php-ext-enable xdebug
-            #            -   run:
-            #                    name: Install PCOV
-            #                    command: |
-            #                        sudo pecl install pcov
-            #                        sudo docker-php-ext-enable pcov
+                        sudo pecl install pcov
+                        sudo docker-php-ext-enable pcov
             -   run:
                     name: Waiting for MySQL to be ready
                     command: |
