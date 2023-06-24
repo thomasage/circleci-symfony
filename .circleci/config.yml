@@ -58,9 +58,8 @@ jobs:
             -   attach_workspace:
                     at: ~/
             -   run:
-                    name: Install PCOV
+                    name: Install Xdebug
                     command: |
-                        sudo pecl install xdebug
                         sudo docker-php-ext-enable xdebug
             #            -   run:
             #                    name: Install PCOV
