@@ -60,7 +60,8 @@ jobs:
             -   run:
                     name: Install Xdebug
                     command: |
-                        sudo docker-php-ext-enable xdebug
+                        sudo pecl install xdebug
+#                        sudo docker-php-ext-enable xdebug
             #            -   run:
             #                    name: Install PCOV
             #                    command: |
